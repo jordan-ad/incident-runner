@@ -1,5 +1,6 @@
 import json
 import subprocess
+import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 SLACK_WEBHOOK = "https://hooks.slack.com/triggers/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"
@@ -28,7 +29,9 @@ class Handler(BaseHTTPRequestHandler):
             "curl_stderr": result.stderr
         }).encode())
 
+
 if __name__ == "__main__":
-    server = HTTPServer(("0.0.0.0", 5000), Handler)
-    print("Listening on http://0.0.0.0:5000")
+    port = int(os.environ.get("PORT", 5000))  # Render will set PORT
+    server = HTTPServer(("0.0.0.0", port), Handler)
+    print(f"Listening on port {port}")
     server.serve_forever()
